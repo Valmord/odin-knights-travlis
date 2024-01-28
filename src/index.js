@@ -1,2 +1,5 @@
-import { dfs, routes, bfs, bfsv2 } from "./board";
-console.log(bfsv2([0, 0], [1, 0]));
+import { breadthFirstTraversal } from "./board";
+breadthFirstTraversal([0, 0], [1, 0]);
+breadthFirstTraversal([0, 0], [3, 3]);
+breadthFirstTraversal([0, 0], [4, 6]);
+breadthFirstTraversal([0, 0], [7, 7]);

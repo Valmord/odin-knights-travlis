@@ -22,65 +22,41 @@ for (let i = 0; i < MAX_CELL; i++) {
   routes.push(row);
 }
 
-export const bfs = (start, end) => {
-  const visited = [];
-  const queue = [start];
-  while (queue.length > 0) {
-    let current = queue.shift();
-    console.log(current);
-    if (String(current) === String(end)) {
-      console.log("hello!");
-    }
-    let currentSquare = routes[current[0]][current[1]];
-    // console.log("current", current, "currentSquare", currentSquare);
-    currentSquare.forEach((option) => {
-      if (!visited.includes(option)) {
-        visited.push(option);
-        queue.push(option);
-      }
-    });
-  }
-};
-
-const getSquare = (array) => {
-  return routes[array[0]][array[1]];
+const getSquare = (x, y) => {
+  return routes[x][y];
 };
 
 const getPath = (pathObj, start, end) => {
   const steps = [end];
-  let current = String(end);
-  while (current !== String(start)) {
-    steps.push(pathObj[current].split(",").map((value) => parseInt(value)));
+  let current = end;
+  while (current !== start) {
+    steps.push(pathObj[current]);
     current = pathObj[current];
   }
   return steps.reverse();
 };
 
 const displayPath = (path) => {
-  const current = path[0];
+  const current = path[path.length - 1];
   console.log(`${path.length - 1} steps to find ${current}`);
   for (let i = 1; i < path.length; i++) {
     console.log(` ${i}: ${path[i]}`);
   }
 };
 
-export const bfsv2 = (start, end) => {
+export const breadthFirstTraversal = (start, end) => {
   const queue = [start]; // e.g. [1,1]
-  const pathNodes = { start: null };
-
+  const pathNodes = {};
   while (queue.length > 0) {
     const current = queue.shift();
-    // console.log(current);
-    if (String(current) === String(end)) {
-      console.log(pathNodes);
-      console.log("found!");
-      // return;
+    if (current === end) {
+      break;
     }
-    const currentSquare = getSquare(current);
+    const currentSquare = getSquare(...current);
     for (let i = 0; i < currentSquare.length; i++) {
-      const square = String(currentSquare[i]);
+      const square = currentSquare[i];
       if (!pathNodes.hasOwnProperty(square)) {
-        pathNodes[square] = String(current);
+        pathNodes[square] = current;
         queue.push(currentSquare[i]);
       }
     }
@@ -90,27 +66,3 @@ export const bfsv2 = (start, end) => {
   displayPath(path);
   return path;
 };
-
-export function dfs(start, end, visited = new Set()) {
-  visited.add(String(start));
-  let current = routes[start[0]][start[1]];
-  let test = "";
-  for (let i = 0; i < current.length; i++) {
-    let option = current[i];
-    if (String(option) === String(end)) {
-      return [option];
-    }
-    if (!visited.has(String(option))) {
-      test = dfs(option, end, visited);
-
-      if (Array.isArray(test)) {
-        test.push(option);
-        if (String(start) === [...visited][0]) {
-          console.log(test);
-          continue;
-        }
-        return test;
-      }
-    }
-  }
-}
