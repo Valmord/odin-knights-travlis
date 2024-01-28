@@ -1,29 +1,33 @@
-export const routes = [];
+export const adjacencyMoves = [];
 
-// example
-// [0,0] [1,2], [2,1]
-// [4,4] [2,3] [2,5] [3,2] [3,6] [5,2] [5,6] [6,3] [6,5]
+const knightMovement = [
+  [+1, +2],
+  [+1, -2],
+  [+2, +1],
+  [+2, -1],
+  [-1, +2],
+  [-1, -2],
+  [-2, +1],
+  [-2, -1],
+];
 
 const MAX_CELL = 8;
 for (let i = 0; i < MAX_CELL; i++) {
-  let row = [];
+  const row = [];
   for (let j = 0; j < MAX_CELL; j++) {
-    let route = [];
-    if (i + 1 < MAX_CELL && j + 2 < MAX_CELL) route.push([i + 1, j + 2]);
-    if (i + 1 < MAX_CELL && j - 2 >= 0) route.push([i + 1, j - 2]);
-    if (i + 2 < MAX_CELL && j + 1 < MAX_CELL) route.push([i + 2, j + 1]);
-    if (i + 2 < MAX_CELL && j - 1 >= 0) route.push([i + 2, j - 1]);
-    if (i - 1 >= 0 && j + 2 < MAX_CELL) route.push([i - 1, j + 2]);
-    if (i - 1 >= 0 && j - 2 >= 0) route.push([i - 1, j - 2]);
-    if (i - 2 >= 0 && j + 1 < MAX_CELL) route.push([i - 2, j + 1]);
-    if (i - 2 >= 0 && j - 1 >= 0) route.push([i - 2, j - 1]);
-    row.push(route);
+    const square = [];
+    knightMovement.forEach((move) => {
+      const x = i + move[0];
+      const y = j + move[1];
+      if (x < MAX_CELL && x >= 0 && y < MAX_CELL && y >= 0) square.push([x, y]);
+    });
+    row.push(square);
   }
-  routes.push(row);
+  adjacencyMoves.push(row);
 }
 
 const getSquare = (x, y) => {
-  return routes[x][y];
+  return adjacencyMoves[x][y];
 };
 
 const getPath = (pathObj, start, end) => {
@@ -45,7 +49,7 @@ const displayPath = (path) => {
 };
 
 export const breadthFirstTraversal = (start, end) => {
-  const queue = [start]; // e.g. [1,1]
+  const queue = [start];
   const pathNodes = {};
   while (queue.length > 0) {
     const current = queue.shift();
